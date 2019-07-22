@@ -2,13 +2,10 @@ package com.dylanreinsma.ticTacToe;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,29 +66,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void restartGame(View view) {
-        TextView textView = findViewById(R.id.textView);
-        textView.setVisibility(View.INVISIBLE);
-        Button button = findViewById(R.id.button);
-        button.setVisibility(View.INVISIBLE);
-        GridLayout gridLayout = findViewById(R.id.gridLayout);
+    public void playAgain(View view) {
+        isGameActive = true;
 
-        try {
-            for (int i = 0; i < gridLayout.getChildCount(); i++) {
+        activePlayer = 0;
 
-                ImageView counter = (ImageView) gridLayout.getChildAt(i);
-                counter.setImageDrawable(null);
-            }
+        for (int i = 0; i < gameState.length; i++) {
 
-            for (int i = 0; i < gameState.length; i++) {
-                gameState[i] = 2;
-            }
+            gameState[i] = 2;
 
-            activePlayer = 0;
-
-            isGameActive = true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        android.support.v7.widget.GridLayout gridLayout = findViewById(R.id.gridLayout);
+
+        for (int i = 0; i < gridLayout.getChildCount(); i++) {
+
+            ((ImageView) gridLayout.getChildAt(i)).setImageResource(0);
+
+        }
+        TextView textView = findViewById(R.id.textView);
+        textView.setText("");
     }
 }
