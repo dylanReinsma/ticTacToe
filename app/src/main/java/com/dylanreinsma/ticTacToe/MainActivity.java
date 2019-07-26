@@ -9,20 +9,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    // 0 = X's & 1 = O's
+    int activePlayer = 0;
+    boolean isGameActive = true;
+    int[] gameState = {2, 2, 2, 2, 2, 2, 2, 2, 2};
+    int[][] winningPositions = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}};
+    int drawCounter = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-
-    // 0 = X's & 1 = O's
-    int activePlayer = 0;
-
-    boolean isGameActive = true;
-
-    int[] gameState = {2, 2, 2, 2, 2, 2, 2, 2, 2};
-
-    int[][] winningPositions = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}};
 
     public void onClick(View view) {
 
@@ -37,12 +35,16 @@ public class MainActivity extends AppCompatActivity {
             if (activePlayer == 0) {
                 counter.setImageResource(R.drawable.x);
                 activePlayer = 1;
+                drawCounter++;
+
             } else {
+
                 counter.setImageResource(R.drawable.o);
                 activePlayer = 0;
+                drawCounter++;
             }
 
-            counter.animate().rotation(3600).setDuration(300);
+            counter.animate().rotation(360).setDuration(500);
 
             for (int[] winningPosition : winningPositions) {
 
@@ -51,30 +53,47 @@ public class MainActivity extends AppCompatActivity {
                     String winner;
 
                     if (activePlayer == 1) {
+
                         winner = "Player X Wins!";
+
                     } else {
+
                         winner = "Player O Wins!";
+
                     }
+
                     isGameActive = false;
                     TextView textView = findViewById(R.id.textView);
                     textView.setText(winner);
                     textView.setVisibility(View.VISIBLE);
                     Button button = findViewById(R.id.button);
                     button.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    if (drawCounter == 9) {
+
+                            isGameActive = false;
+                            TextView textView = findViewById(R.id.textView);
+                            textView.setText("Draw!");
+                            textView.setVisibility(View.VISIBLE);
+                            Button button = findViewById(R.id.button);
+                            button.setVisibility(View.VISIBLE);
+                        }
+                    }
+
                 }
             }
         }
-    }
 
     public void playAgain(View view) {
-        isGameActive = true;
 
+        isGameActive = true;
         activePlayer = 0;
 
         for (int i = 0; i < gameState.length; i++) {
 
             gameState[i] = 2;
-
         }
 
         android.support.v7.widget.GridLayout gridLayout = findViewById(R.id.gridLayout);
@@ -84,7 +103,11 @@ public class MainActivity extends AppCompatActivity {
             ((ImageView) gridLayout.getChildAt(i)).setImageResource(0);
 
         }
+
         TextView textView = findViewById(R.id.textView);
         textView.setText("");
+        Button button = findViewById(R.id.button);
+        button.setVisibility(View.INVISIBLE);
+        drawCounter = 0;
     }
 }
